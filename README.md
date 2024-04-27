@@ -6,6 +6,7 @@ This project is a React.js eCommerce application that allows users to browse pro
 
 - [Technologies Used](#technologies-used)
 - [Getting Started](#getting-started)
+- [Credentials](#credentials)
 - [Credits](#credits)
 
 ## Technologies Used
@@ -35,6 +36,14 @@ yarn install
 ```
 ```bazaar
 yarn start
+```
+
+## Credentials
+
+Use the following credentials to login to the application:
+```
+Email: ghazi@mailsac.com
+Password: ghazi
 ```
 
 ## Credits
