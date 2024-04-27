@@ -10,7 +10,7 @@ const Cart: FC = () => {
     const cartTotal = cart.reduce((acc: number, item: CartItem) => acc + item.product.price, 0);
 
     useEffect(() => {
-        document.title = "متجر غازي | سلة المشتريات";
+        document.title = "غازي ستور | سلة المشتريات";
     }, []);
 
     if (!cart.length) return (

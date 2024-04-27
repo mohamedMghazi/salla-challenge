@@ -15,7 +15,7 @@ const Login: FC = () => {
     const [error, setError] = useState<string | undefined>();
 
     useEffect(() => {
-        document.title = "متجر غازي | تسجيل الدخول";
+        document.title = "غازي ستور | تسجيل الدخول";
     }, []);
 
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {

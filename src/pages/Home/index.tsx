@@ -5,7 +5,7 @@ import ProductsSection from "components/ProductsSection";
 
 const Home: FC = () => {
     useEffect(() => {
-        document.title = "متجر غازي | الرئيسية";
+        document.title = "غازي ستور | الرئيسية";
     }, []);
 
     return (
