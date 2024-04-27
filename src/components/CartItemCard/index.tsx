@@ -37,7 +37,7 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
                     <button
                         className={`shrink-0 px-2 text-md text-gray-500 ${quantity === 1 ? 'opacity-50' : ''}`}
                         onClick={() => handleQuantityChange(quantity + 1)}
-                        disabled={cartLoading}
+                        disabled={cartLoading === "loading"}
                     >
                         +
                     </button>
@@ -48,15 +48,15 @@ const CartItemCard = ({ item }: { item: CartItem }) => {
                     <button
                         className={`shrink-0 px-2 text-md text-gray-500 ${quantity === 1 ? 'opacity-50' : ''}`}
                         onClick={() => handleQuantityChange(quantity - 1)}
-                        disabled={cartLoading}
+                        disabled={cartLoading === "loading"}
                     >
                         -
                     </button>
                 </div>
                 <button
                     type="button"
-                    className={`w-[28px] h-[28px] shrink-0 flex items-center justify-center text-xs border border-red-500 text-red-500 rounded-full p-1 hover:bg-red-500 hover:text-white transition-all ${cartLoading ? 'opacity-50' : ''}`}
-                    disabled={cartLoading}
+                    className={`w-[28px] h-[28px] shrink-0 flex items-center justify-center text-xs border border-red-500 text-red-500 rounded-full p-1 hover:bg-red-500 hover:text-white transition-all ${cartLoading === "loading" ? 'opacity-50' : ''}`}
+                    disabled={cartLoading === "loading"}
                     onClick={() => dispatch(removeFromCart({ id }) as any)}
                 >
                     <i className="sicon-trash"></i>

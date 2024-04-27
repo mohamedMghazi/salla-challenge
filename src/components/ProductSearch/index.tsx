@@ -12,7 +12,7 @@ const ProductSearch = () => {
 
     useEffect(() => {
         dispatch(searchForProducts({ query, category }) as any);
-    }, [query, category]);
+    }, [query, category, dispatch]);
 
     return (
         <div className="flex items-center justify-between gap-4 mb-4">

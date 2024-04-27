@@ -23,10 +23,10 @@ export type Category = {
 
 interface ApiState {
     products: Product[];
-    loading: boolean;
+    loading: string;
+    cartLoading: string;
     error: string | null;
     cart: CartItem[];
-    cartLoading: boolean;
     categories: Category[];
     allProducts: Product[];
 }
@@ -87,8 +87,8 @@ const eCommerceSlice = createSlice({
         allProducts: [],
         products: [],
         categories: [],
-        loading: true,
-        cartLoading: false,
+        loading: 'loading',
+        cartLoading: 'loading',
         error: null,
         cart: [],
     } as ApiState,
@@ -96,70 +96,74 @@ const eCommerceSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(getProductsAsync.pending, (state) => {
-                state.loading = true;
+                state.loading = 'loading';
                 state.error = null;
             })
             .addCase(getProductsAsync.fulfilled, (state, action) => {
-                state.loading = false;
                 state.products = action.payload?.products;
-                state.categories = action.payload?.categories;
+
+                const productsCategories = action.payload.products?.map((product: any) => product.categoryId) || [];
+                const productsCategoriesSet = new Set(productsCategories);
+                state.categories = action.payload?.categories.data?.filter((category: any) => productsCategoriesSet.has(category.id)) || [];
+
+                state.loading = 'idle';
             })
             .addCase(getProductsAsync.rejected, (state, action) => {
-                state.loading = false;
+                state.loading = 'failed';
                 state.error = action.error.message ?? 'Failed to fetch products';
             })
             .addCase(getCartItemsAsync.pending, (state) => {
-                state.cartLoading = true;
+                state.cartLoading = 'loading';
                 state.error = null;
             })
             .addCase(getCartItemsAsync.fulfilled, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'idle';
                 state.cart = action.payload;
             })
             .addCase(getCartItemsAsync.rejected, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'failed';
                 state.error = action.error.message ?? 'Failed to fetch cart items';
             })
             .addCase(addToCartAsync.pending, (state) => {
-                state.cartLoading = true;
+                state.cartLoading = 'loading';
                 state.error = null;
             })
-            .addCase(addToCartAsync.fulfilled, (state, action) => {
-                state.cartLoading = false;
+            .addCase(addToCartAsync.fulfilled, (state) => {
+                state.cartLoading = 'idle';
             })
             .addCase(addToCartAsync.rejected, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'failed';
                 state.error = action.error.message ?? 'Failed to add item to cart';
             })
             .addCase(updateCartAsync.pending, (state) => {
-                state.cartLoading = true;
+                state.cartLoading = 'loading';
                 state.error = null;
             })
             .addCase(updateCartAsync.fulfilled, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'idle';
                 state.cart = state.cart.map(i => i.product.id === Number(action.payload.productId) ? {...i, quantity: action.payload.quantity} : i);
             })
             .addCase(updateCartAsync.rejected, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'failed';
                 state.error = action.error.message ?? 'Failed to update cart';
             })
-            .addCase(removeFromCart.pending, (state, action) => {
-                state.cartLoading = true;
+            .addCase(removeFromCart.pending, (state) => {
+                state.cartLoading = 'loading';
                 state.error = null;
             })
-            .addCase(removeFromCart.fulfilled, (state, action) => {
-                state.cartLoading = false;
+            .addCase(removeFromCart.fulfilled, (state) => {
+                state.cartLoading = 'idle';
             })
             .addCase(removeFromCart.rejected, (state, action) => {
-                state.cartLoading = false;
+                state.cartLoading = 'failed';
                 state.error = action.error.message ?? 'Failed to remove item from cart';
             })
             .addCase(searchForProducts.pending, (state) => {
-                state.loading = true;
+                state.loading = 'loading';
                 state.error = null;
             })
             .addCase(searchForProducts.fulfilled, (state, action) => {
-                state.loading = false;
+                state.loading = 'idle';
 
                 if (!state.allProducts.length) {
                     state.allProducts = state.products;
@@ -185,7 +189,7 @@ const eCommerceSlice = createSlice({
                 }
             })
             .addCase(searchForProducts.rejected, (state, action) => {
-                state.loading = false;
+                state.loading = 'failed';
                 state.allProducts = [];
                 state.error = action.error.message ?? 'Failed to search for products';
             });

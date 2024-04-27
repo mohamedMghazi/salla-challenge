@@ -17,7 +17,7 @@ const ProductDetails: FC = () => {
         document.title = product?.name ? `متجر غازي | ${product?.name}` : "متجر غازي | صفحة المنتج";
     }, [product?.name]);
 
-    if (loading) {
+    if (loading === "loading") {
         return <Spinner />
     }
 

@@ -18,9 +18,9 @@ const AddToCartButton = ({ product, quantity = 1 }: { product: Product, quantity
 
     return (
         <button
-            disabled={cartLoading}
+            disabled={cartLoading === "loading"}
             type="button"
-            className={`w-full bg-primary text-white p-2 text-md rounded-md ${cartLoading ? "opacity-80" : ""}`}
+            className={`w-full bg-primary text-white p-2 text-md rounded-md ${cartLoading === "loading" ? "opacity-80" : ""}`}
             onClick={handleAddToCart}
         >
             أضف إلى السلة

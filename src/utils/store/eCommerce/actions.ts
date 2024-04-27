@@ -1,13 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import API from "../../API";
-import { getCookie } from "../../helpers/cookiesManager";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
+import API from "utils/API";
+import { getCookie } from "utils/helpers/cookiesManager";
 
 export const getCartItemsAsync = createAsyncThunk(
     'eCommerce/getCartItemsAsync',
     async () => {
         const api = new API();
-        const cartResponse = await api.getData(`cart/?token=${getCookie("token")}`);
+        const cartResponse = await api.getData("cart/", { params: { token: getCookie("token") } });
         return cartResponse.data?.cartItems || [];
     }
 );
@@ -16,7 +16,13 @@ export const addToCartAsync = createAsyncThunk(
     'eCommerce/addToCartAsync',
     async ({ productId, quantity }: { productId: number, quantity: number }, thunkAPI) => {
         const api = new API();
-        const res = await api.postData(`cart/add/?token=${getCookie("token")}`, { productId, quantity });
+        const res = await api.postData("cart/add/",
+            { productId, quantity },
+            {
+                params:
+                    { token: getCookie("token") }
+            }
+        );
 
         if (!res.success) {
             if (res.error === "authentication token not valid") {
@@ -77,15 +83,11 @@ export const getProductsAsync = createAsyncThunk(
     async () => {
         const api = new API();
         const productsResponse = await api.getData("product/");
-        const categoriesResponse = await api.getData("category/");
+        const categories = await api.getData("category/");
 
-        // Get the categories of the first 10 products only
-        const productsCategories = productsResponse.data?.slice(0, 10)?.map((product: any) => product.categoryId) || [];
-        const categoriesSet = new Set(productsCategories);
-        const categories = categoriesResponse.data?.filter((category: any) => categoriesSet.has(category.id)) || [];
+        const products = productsResponse.data?.slice(0, process.env.REACT_APP_PRODUCTS_COUNT) || [];
 
-
-        return { products: productsResponse.data?.slice(0, 10) || [], categories };
+        return { products, categories };
     }
 );
 

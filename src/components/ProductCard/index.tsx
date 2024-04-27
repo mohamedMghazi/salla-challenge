@@ -1,5 +1,5 @@
 import { memo } from "react";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import AddToCartButton from "../AddToCartButton";
 
 export interface Product {
