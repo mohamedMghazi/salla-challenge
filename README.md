@@ -30,7 +30,8 @@ To get started with the project, follow these steps:
 
 ### Installation
 
-Use the following command to install the project dependencies and run it:
+Create `.env` file with the values that exist in `.env.example`
+and use the following command to install the project dependencies and run it:
 ```bazaar
 yarn install
 ```
