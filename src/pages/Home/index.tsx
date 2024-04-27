@@ -1,58 +1,15 @@
-import { FC } from "react";
-import ProductCard from "components/ProductCard";
+import {FC, useEffect} from "react";
+import { useSelector } from "react-redux";
 
-const dummyProducts = [
-    {
-        id: 1,
-        title: "سماعات apple AirPods Max الاصدار الجديد",
-        description: "الاصدار الاحدث و الافضل حتى اليوم",
-        image: "/images/products/01.png",
-        categories: [
-            {id: 1, title: "تصنيف اول"},
-            {id: 2, title: "تصنيف ثاني"},
-        ],
-        old_price: 2500.00,
-        price: 2250.00,
-    },
-    {
-        id: 2,
-        title: "سماعات apple AirPods Max الاصدار الجديد",
-        description: "الاصدار الاحدث و الافضل حتى اليوم",
-        image: "/images/products/02.png",
-        categories: [
-            {id: 1, title: "تصنيف اول"},
-            {id: 2, title: "تصنيف ثاني"},
-        ],
-        old_price: 2500.00,
-        price: 2250.00
-    },
-    {
-        id: 3,
-        title: "سماعات apple AirPods Max الاصدار الجديد",
-        description: "الاصدار الاحدث و الافضل حتى اليوم",
-        image: "/images/products/03.png",
-        categories: [
-            {id: 1, title: "تصنيف اول"},
-            {id: 2, title: "تصنيف ثاني"},
-        ],
-        old_price: 2500.00,
-        price: 2250.00
-    },
-    {
-        id: 4,
-        title: "سماعات apple AirPods Max الاصدار الجديد",
-        description: "الاصدار الاحدث و الافضل حتى اليوم",
-        image: "/images/products/04.png",
-        categories: [
-            {id: 1, title: "تصنيف اول"},
-            {id: 2 , title: "تصنيف ثاني"},
-        ],
-        old_price: 2500.00,
-        price: 2250.00
-    }
-]
+import ProductCard, { Product } from "components/ProductCard";
 
 const Home: FC = () => {
+    const products = useSelector((state: any) => state.eCommerce.products);
+
+    useEffect(() => {
+        document.title = "متجر غازي | الرئيسية";
+    }, []);
+
     return (
         <div className="p-2 sm:p-4 bg-white rounded-lg shadow-4xl">
             <div className="w-full  bg-gray-100 rounded-lg mb-8">
@@ -79,7 +36,7 @@ const Home: FC = () => {
             </div>
 
             <div className="grid md:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-2 sm:gap-4">
-                {dummyProducts.map((product) => <ProductCard product={product} key={product.id}/>)}
+                {products.map((product: Product) => <ProductCard product={product} key={product.id}/>)}
             </div>
         </div>
     );

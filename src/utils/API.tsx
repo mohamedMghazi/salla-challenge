@@ -1,8 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import {getCookie} from "./helpers/cookiesManager";
 
 interface ApiResponse<T> {
     success: boolean;
-    data?: T;
+    data?: any; // to be replaced soon
     error?: string;
 }
 
@@ -11,15 +12,15 @@ export default class API {
 
     constructor() {
         this.instance = axios.create({
-            baseURL: "https://fakestoreapi.com",
+            baseURL: "https://limitless-lake-55070.herokuapp.com",
             timeout: 10000, // Adjust as needed
         });
 
         this.instance.interceptors.request.use(
             (config) => {
-                const token = this.getTokenFromCookie();
+                const token = getCookie("token");
                 if (token) {
-                    config.headers.Authorization = `Bearer ${token}`;
+                    config.headers["token"] = `${token}`;
                 }
                 return config;
             },
@@ -30,7 +31,7 @@ export default class API {
 
         this.instance.interceptors.response.use(
             (response) => {
-                return response.data;
+                return response;
             },
             (error) => {
                 if (error.response) {
@@ -42,10 +43,6 @@ export default class API {
                 }
             }
         );
-    }
-
-    private getTokenFromCookie(): string | null {
-        return document.cookie.replace(/(?:^|.*;\s*)token\s*\\=\s*([^;]*).*$|^.*$/, "$1") ?? null;
     }
 
     public async getData<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {

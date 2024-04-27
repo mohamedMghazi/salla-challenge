@@ -1,6 +1,7 @@
 import {lazy} from "react";
 import Root from "layout/Root";
 import NotFound from "components/NotFound";
+import RouteGuard from "./RouteGuard";
 
 
 // lazy pages
@@ -12,7 +13,9 @@ const ProductDetails = lazy(() => import("pages/ProductDetails"));
 export const PATHS = [
     {
         path: "/",
-        element: <Root />,
+        element: <RouteGuard>
+            <Root />
+        </RouteGuard>,
         errorElement: <NotFound />,
         children: [
             { path: "/", element: <Home /> },

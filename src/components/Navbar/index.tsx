@@ -1,9 +1,8 @@
 import { FC } from "react";
-import {Link, useLocation} from "react-router-dom";
+import { Link } from "react-router-dom";
+import UserActions from "components/UserActions";
 
 const Navbar: FC = () => {
-    const location = useLocation();
-
     return (
         <header className="md:py-6 py-4">
             <div className="flex justify-between flex-col sm:flex-row gap-4 items-center">
@@ -19,17 +18,7 @@ const Navbar: FC = () => {
                     </div>
                 </div>
 
-                {location.pathname !== "/login" && <div className="flex items-center gap-4">
-                    <Link to="/login" type="button"
-                          className="w-[40px] h-[40px] rounded-full text-center flex items-center justify-center bg-secondary-50 text-primary">
-                        <i className="sicon-user"></i>
-                    </Link>
-                    
-                    <Link to="/cart" type="button"
-                          className="w-[40px] h-[40px] rounded-full text-center flex items-center justify-center bg-secondary-50 text-primary">
-                        <i className="sicon-shopping-bag"/>
-                    </Link>
-                </div>}
+                <UserActions />
             </div>
         </header>
     );
