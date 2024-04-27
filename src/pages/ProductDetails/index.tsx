@@ -14,7 +14,7 @@ const ProductDetails: FC = () => {
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
-        document.title = product?.name ? `متجر غازي | ${product?.name}` : "متجر غازي | Product Details";
+        document.title = product?.name ? `متجر غازي | ${product?.name}` : "متجر غازي | صفحة المنتج";
     }, [product?.name]);
 
     if (loading) {

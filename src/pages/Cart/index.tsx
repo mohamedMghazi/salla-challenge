@@ -1,4 +1,4 @@
-import { FC } from "react";
+import {FC, useEffect} from "react";
 import {useSelector} from "react-redux";
 import { CartItem } from "utils/store/eCommerce";
 import CartItemCard from "components/CartItemCard";
@@ -8,6 +8,10 @@ const Cart: FC = () => {
     const cart = useSelector((state: any) => state.eCommerce.cart);
 
     const cartTotal = cart.reduce((acc: number, item: CartItem) => acc + item.product.price, 0);
+
+    useEffect(() => {
+        document.title = "متجر غازي | سلة المشتريات";
+    }, []);
 
     if (!cart.length) return (
         <main className="w-full main flex-auto">

@@ -1,4 +1,4 @@
-import {FC, FormEvent, useState} from "react";
+import {FC, FormEvent, useEffect, useState} from "react";
 import { useNavigate } from "react-router";
 import API from "utils/API";
 import { setCookie } from "utils/helpers/cookiesManager";
@@ -13,6 +13,10 @@ const Login: FC = () => {
     const [form, setForm] =
         useState<{ email: string, password: string }>({ email: "", password: "" });
     const [error, setError] = useState<string | undefined>();
+
+    useEffect(() => {
+        document.title = "متجر غازي | تسجيل الدخول";
+    }, []);
 
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
