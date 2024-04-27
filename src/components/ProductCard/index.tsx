@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 
-type Product = {
+export interface Product {
     id: number;
     title: string;
     description: string;
