@@ -19,6 +19,12 @@ export const addToCartAsync = createAsyncThunk(
         const res = await api.postData(`cart/add/?token=${getCookie("token")}`, { productId, quantity });
 
         if (!res.success) {
+            if (res.error === "authentication token not valid") {
+                toast("يرجى تسجيل الدخول أولاً", { type: "error" });
+            } else {
+                toast("حدث خطأ أثناء إضافة المنتج إلى السلة", {type: "error"});
+            }
+
             return thunkAPI.rejectWithValue(res.error);
         }
         toast("تمت الإضافة إلى السلة", { type: "success" });
@@ -71,6 +77,21 @@ export const getProductsAsync = createAsyncThunk(
     async () => {
         const api = new API();
         const productsResponse = await api.getData("product/");
-        return productsResponse.data?.slice(0, 10) || [];
+        const categoriesResponse = await api.getData("category/");
+
+        // Get the categories of the first 10 products only
+        const productsCategories = productsResponse.data?.slice(0, 10)?.map((product: any) => product.categoryId) || [];
+        const categoriesSet = new Set(productsCategories);
+        const categories = categoriesResponse.data?.filter((category: any) => categoriesSet.has(category.id)) || [];
+
+
+        return { products: productsResponse.data?.slice(0, 10) || [], categories };
+    }
+);
+
+export const searchForProducts = createAsyncThunk(
+    'eCommerce/searchForProducts',
+    async ({ query, category }: { query?: string, category?: string }) => {
+        return { query, category };
     }
 );

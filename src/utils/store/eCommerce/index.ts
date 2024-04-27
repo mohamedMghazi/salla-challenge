@@ -4,7 +4,7 @@ import {
     addToCartAsync,
     getCartItemsAsync,
     getProductsAsync,
-    removeFromCart,
+    removeFromCart, searchForProducts,
     updateCartAsync
 } from "utils/store/eCommerce/actions";
 
@@ -14,12 +14,21 @@ export interface CartItem {
     product: Product;
 }
 
+export type Category = {
+    id: number,
+    categoryName: string,
+    description: string,
+    imageURL: string | null
+}
+
 interface ApiState {
     products: Product[];
     loading: boolean;
     error: string | null;
     cart: CartItem[];
     cartLoading: boolean;
+    categories: Category[];
+    allProducts: Product[];
 }
 
 const eCommerceSlice = createSlice({
@@ -75,8 +84,10 @@ const eCommerceSlice = createSlice({
                 price: 2250.00
             }
         ],
+        allProducts: [],
         products: [],
-        loading: false,
+        categories: [],
+        loading: true,
         cartLoading: false,
         error: null,
         cart: [],
@@ -90,7 +101,8 @@ const eCommerceSlice = createSlice({
             })
             .addCase(getProductsAsync.fulfilled, (state, action) => {
                 state.loading = false;
-                state.products = action.payload;
+                state.products = action.payload?.products;
+                state.categories = action.payload?.categories;
             })
             .addCase(getProductsAsync.rejected, (state, action) => {
                 state.loading = false;
@@ -141,6 +153,41 @@ const eCommerceSlice = createSlice({
             .addCase(removeFromCart.rejected, (state, action) => {
                 state.cartLoading = false;
                 state.error = action.error.message ?? 'Failed to remove item from cart';
+            })
+            .addCase(searchForProducts.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(searchForProducts.fulfilled, (state, action) => {
+                state.loading = false;
+
+                if (!state.allProducts.length) {
+                    state.allProducts = state.products;
+                }
+
+                const { query, category } = action.payload;
+
+                if (query && category !== 'all') {
+                    state.products = state.allProducts.filter((product) =>
+                        product.name.toLowerCase().includes(query.toLowerCase()) &&
+                        Number(product.categoryId) === Number(category)
+                    );
+                } else if (query) {
+                    state.products = state.allProducts.filter((product) =>
+                        product.name.toLowerCase().includes(query.toLowerCase())
+                    );
+                } else if (category !== 'all') {
+                    state.products = state.allProducts.filter((product) =>
+                        Number(product.categoryId) === Number(category)
+                    );
+                } else {
+                    state.products = state.allProducts;
+                }
+            })
+            .addCase(searchForProducts.rejected, (state, action) => {
+                state.loading = false;
+                state.allProducts = [];
+                state.error = action.error.message ?? 'Failed to search for products';
             });
     },
 });
