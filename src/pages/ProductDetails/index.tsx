@@ -1,4 +1,4 @@
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Spinner from "components/Spinner";
@@ -10,6 +10,8 @@ const ProductDetails: FC = () => {
     const products = useSelector((state: any) => state.eCommerce.products);
     const loading = useSelector((state: any) => state.eCommerce.loading);
     const product = products.find((p: any) => p.id === Number(id ?? "0"));
+
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         document.title = product?.name ? `متجر غازي | ${product?.name}` : "متجر غازي | Product Details";
@@ -38,12 +40,17 @@ const ProductDetails: FC = () => {
                     <div className="flex items-center justify-center gap-4">
                         <div
                             className="flex shrink-0 items-center justify-center p-2 border border-1 border-gray-200 rounded-lg">
-                            <button className="shrink-0 px-2 text-md text-gray-500">+</button>
-                            <input type="number" value="1"
-                                   className="w-[50px] flex-1 text-center appearance-none bg-transparent"/>
-                            <button className="shrink-0 px-2 text-md text-gray-500">-</button>
+                            <button className="shrink-0 px-2 text-md text-gray-500" onClick={() => setQuantity(quantity + 1)}>+</button>
+                            <input
+                                disabled
+                                type="number"
+                                value={quantity}
+                                onChange={(e) => setQuantity(Number(e.target.value))}
+                                className="w-[50px] flex-1 text-center appearance-none bg-transparent"
+                            />
+                            <button className="shrink-0 px-2 text-md text-gray-500" onClick={() => quantity > 1 && setQuantity(quantity - 1)}>-</button>
                         </div>
-                        <AddToCartButton product={product} />
+                        <AddToCartButton product={product} quantity={quantity} />
                     </div>
                 </div>
             </div>

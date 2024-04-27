@@ -3,7 +3,7 @@ import {getCookie} from "./helpers/cookiesManager";
 
 interface ApiResponse<T> {
     success: boolean;
-    data?: any; // to be replaced soon
+    data?: any;
     error?: string;
 }
 
@@ -12,8 +12,8 @@ export default class API {
 
     constructor() {
         this.instance = axios.create({
-            baseURL: "https://limitless-lake-55070.herokuapp.com",
-            timeout: 10000, // Adjust as needed
+            baseURL: process.env.REACT_APP_BASE_URL,
+            timeout: 10000,
         });
 
         this.instance.interceptors.request.use(
